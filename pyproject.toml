@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kalman-portfolio-lab"
+version = "0.1.0"
+description = "EM-PCA + Kalman Filter portfolio lab webapp"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "scipy>=1.11",
+  "yfinance>=0.2.40",
+  "streamlit>=1.36",
+  "plotly>=5.22",
+  "pydantic>=2.7",
+]
+
+[tool.setuptools]
+packages = ["core", "apps"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
