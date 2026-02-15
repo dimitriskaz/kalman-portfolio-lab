@@ -61,17 +61,17 @@ def run_approach2_em_pca_on_yahoo(
 
     m = k * (p + 1)
     if m > n:
-        # The EM-PCA routine in the paper sets m as "dimension of target space".
+        # The EM-PCA routine sets m as "dimension of target space".
         # It is valid to have m <= n. If m > n, the inverses become unstable.
         raise ValueError(f"Invalid setting: m=k*(p+1)={m} exceeds n={n}. Reduce k or p.")
 
     A, B = build_A_B(k, p)
 
-    # Q=eye(k), R=eye(m) per MATLAB
+    # Q=eye(k), R=eye(m)
     Q = np.eye(k)
     R = np.eye(m)
 
-    # Build E (n x n) measurement noise covariance (real-data replacement)
+    # Build E (n x n) measurement noise covariance
     y_var = np.var(Y, axis=1) + 1e-12
     E = np.diag(noise_scale * y_var)
     E = 0.5 * (E + E.T)
@@ -85,7 +85,6 @@ def run_approach2_em_pca_on_yahoo(
         seed=seed,
     )
 
-    # IMPORTANT:
     # C_est was estimated on centered data (Y - mu), so we also filter in centered space.
     Yc = Y - mu
 

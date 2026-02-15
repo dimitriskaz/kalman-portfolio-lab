@@ -43,7 +43,7 @@ def cestimate_opt(
     if Xhat.shape[1] != Tm1 or u.shape[1] != Tm1:
         raise ValueError("Yhat, Xhat, u must share the same number of columns (time steps).")
 
-    # --- Stacking matrices (exactly as MATLAB) ---
+    # --- Stacking matrices  ---
     # A_hat = [A; zeros((n-1)*m, m)]
     A_hat = np.vstack([A, np.zeros(((n - 1) * m, m))])  # (n*m x m)
 
@@ -77,7 +77,7 @@ def cestimate_opt(
 
     E = Yhat - C @ Xhat - D @ u  # (n x Tm1)
 
-    # MATLAB CVX: minimize(norm(E))
+    # CVX: minimize(norm(E))
     # Match default matrix norm => spectral norm (largest singular value)
     objective = cp.Minimize(cp.norm(E, 2))
     prob = cp.Problem(objective)

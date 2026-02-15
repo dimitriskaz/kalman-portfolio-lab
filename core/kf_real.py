@@ -8,7 +8,6 @@ from core.cestimate_opt import cestimate_opt
 
 def build_A_B(k: int, p: int) -> tuple[np.ndarray, np.ndarray]:
     """
-    MATLAB:
       m = k*(p+1)
       A=[zeros(k,m-k),zeros(k,k); eye(k*p),zeros(m-k,k)];
       B=eye(m,k);
@@ -68,15 +67,15 @@ def kalman_with_C_est(
     m = k * (p + 1)
     A, B = build_A_B(k, p)
 
-    # Build X from u (consistent with the MATLAB dynamics)
+    # Build X from u
     X = build_state_X_from_u(u, k, p)  # (m x T)
 
-    # Build E (measurement noise covariance) similar spirit to MATLAB
+    # Build E (measurement noise covariance)
     # MATLAB makes E from random noise; for real data we estimate scale from Y variance
     y_var = np.var(Y, axis=1) + 1e-12
     E = np.diag(noise_scale * y_var)  # (n x n), SPD-ish
 
-    # u_hat / Yhat / Xhat use T-1 columns (like MATLAB)
+    # u_hat / Yhat / Xhat use T-1 columns
     Yhat = Y[:, :-1]
     Xhat = X[:, :-1]
     uhat = u[:, :-1]
@@ -84,9 +83,9 @@ def kalman_with_C_est(
     # Estimate C (Approach 1 exact translation)
     C_est = cestimate_opt(Yhat, Xhat, A, B, uhat, m=m, n=n, k=k)
 
-    # Kalman recursion (estimated C only), matching MATLAB structure
-    Q = np.eye(k)          # as MATLAB
-    R = np.eye(m)          # as MATLAB
+    # Kalman recursion (estimated C only)
+    Q = np.eye(k)          
+    R = np.eye(m)         
 
     Sigma = np.zeros((m, m, T))
     Sigma[:, :, 0] = R
